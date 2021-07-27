@@ -1,0 +1,9 @@
+# Jupyter Notebook
+.ipynb_checkpoints
+
+.DS_Store
+
+input/*
+output/*
+train/*
+submission/*
