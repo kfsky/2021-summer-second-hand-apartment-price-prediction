@@ -27,7 +27,7 @@ from mypipe.Block_features import BaseBlock, ContinuousBlock, CountEncodingBlock
 
 
 # ---------------------------------------------------------------------- #
-exp = "exp004"
+exp = "exp006"
 config = Config(EXP_NAME=exp, TARGET="PRICE")
 exp_env.make_env(config)
 rcParams['font.family'] = 'Noto Sans CJK JP'
@@ -274,6 +274,7 @@ def main():
         ]],
         ArithmeticOperationBlock(target_column1='面積（㎡）', target_column2="建ぺい率（％）", operation="*"),
         ArithmeticOperationBlock(target_column1='面積（㎡）', target_column2="容積率（％）", operation="*"),
+        ArithmeticOperationBlock(target_column1="取引時点", target_column2="建築年", operation="-"),
         *[AggregationBlock(whole_df=whole_df,
                            key="最寄駅：名称",
                            agg_column=c ,

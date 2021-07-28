@@ -27,7 +27,7 @@ from mypipe.Block_features import BaseBlock, ContinuousBlock, CountEncodingBlock
 
 
 # ---------------------------------------------------------------------- #
-exp = "exp004"
+exp = "exp005"
 config = Config(EXP_NAME=exp, TARGET="PRICE")
 exp_env.make_env(config)
 rcParams['font.family'] = 'Noto Sans CJK JP'
@@ -218,6 +218,23 @@ class TargetEncodingBlock(BaseBlock):
         return output_encoded
 
 
+class StationCountEncodingBlock(BaseBlock):
+    def __init__(self, columns: str):
+        self.columns = columns
+
+    def transform(self, input_df):
+        output_df = pd.DataFrame()
+        station_df = pd.read_csv("../add/station.csv").drop_duplicates("最寄駅：名称")
+        _df = pd.merge(input_df, station_df, on="最寄駅：名称", how="left")
+
+        c = self.columns
+
+        vc = _df[c].value_counts()
+        output_df[c] = _df[c].map(vc)
+
+        return output_df.add_prefix("StationInfo_CE_")
+
+
 # ---------------------------------------------------------------------- #
 def main():
     warnings.filterwarnings("ignore")
@@ -274,6 +291,7 @@ def main():
         ]],
         ArithmeticOperationBlock(target_column1='面積（㎡）', target_column2="建ぺい率（％）", operation="*"),
         ArithmeticOperationBlock(target_column1='面積（㎡）', target_column2="容積率（％）", operation="*"),
+        ArithmeticOperationBlock(target_column1="取引時点", target_column2="建築年", operation="-"),
         *[AggregationBlock(whole_df=whole_df,
                            key="最寄駅：名称",
                            agg_column=c ,
@@ -301,7 +319,8 @@ def main():
             "都市計画",
             "改装",
             "取引の事情等"
-        ]]
+        ]],
+        *[StationCountEncodingBlock(columns=c) for c in ["運営会社","路線名"]]
     ]
 
     # create train_x, train_y, test_x

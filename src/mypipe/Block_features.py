@@ -105,6 +105,7 @@ class ArithmeticOperationBlock(BaseBlock):
 
         return output_df[output_df_columns_name]
 
+
 class AggregationBlock(BaseBlock):
     def __init__(self, whole_df: pd.DataFrame,
                  key: str,
