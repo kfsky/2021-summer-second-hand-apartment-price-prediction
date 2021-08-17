@@ -28,7 +28,7 @@ from mypipe.Block_features import BaseBlock, ContinuousBlock, CountEncodingBlock
 
 
 # ---------------------------------------------------------------------- #
-exp = "exp019"
+exp = "exp020"
 config = Config(EXP_NAME=exp, TARGET="PRICE")
 exp_env.make_env(config)
 rcParams['font.family'] = 'Noto Sans CJK JP'
@@ -367,6 +367,21 @@ class GeoCodeBlock(BaseBlock):
         return output_df[["Area_Latitude", "Area_Longitude"]]
 
 
+# 不動産価格指数を追加する
+class PriceIndexBlock(BaseBlock):
+    def fit(self, input_df, y=None):
+        return self.transform(input_df)
+
+    def transform(self, input_df):
+        price_index_df = pd.read_csv("../add/price_index.csv").groupby("取引時点").mean().reset_index()
+        price_index_df.rename(columns={"取引時点": "取引時点_年次"}, inplace=True)
+        output_df = pd.merge(input_df, price_index_df, on="取引時点_年次", how="left")
+
+        columns = ["全国Japan季節調整"]
+
+        return output_df[columns]
+
+
 # ---------------------------------------------------------------------- #
 def main():
     warnings.filterwarnings("ignore")
@@ -497,6 +512,7 @@ def main():
         WrapperBlock(get_municipalities),
         WrapperBlock(get_ldk),
         GeoCodeBlock(),
+        PriceIndexBlock()
     ]
 
     # create train_x, train_y, test_x
