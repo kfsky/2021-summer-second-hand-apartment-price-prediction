@@ -8,3 +8,5 @@ add/*
 output/*
 train/*
 submission/*
+src/catboost_info
+src/mypipe/models/__pycache__
