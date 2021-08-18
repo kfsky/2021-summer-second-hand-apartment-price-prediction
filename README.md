@@ -40,8 +40,9 @@ URL： https://github.com/mst8823/atmacup10
 * StratifiedKFold (n=5)
 
 ### 3. model
-#### 1. single model
+#### 1. Single model
 * LightGBM：CV=0.0714, LB=0.0729
+* CatBoost：CV=0.0705, LB=0.0724
 
 
 
