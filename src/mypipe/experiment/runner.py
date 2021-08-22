@@ -150,7 +150,8 @@ class Runner:
 
         oof = np.mean(preds_seeds, axis=0)
         score = self.get_score(train_y, oof)
-        Util.dump(oof, f"{self.config.PREDS} =======  end training cv - score: {score:.4f} ======= ")
+        Util.dump(oof, f'{self.config.PREDS}/oof{self.run_name}.pkl')
+        self.logger.info(f'{self.exp_run_name} - end training cv - score: {score:.4f}')
 
         if self.use_mlflow:
             mlflow.log_metric('overall_score', score)

@@ -95,11 +95,11 @@ def main():
     train = pd.read_csv(os.path.join(config.INPUT, "train.csv"))
 
     # read oof and pred
-    exp_list = ["exp015", "exp016", "exp017", "exp026", "exp027", "exp028", "exp029"]
+    exp_list = ["exp014", "exp015", "exp016", "exp017", "exp018", "exp020", "exp026", "exp027", "exp028", "exp029"]
     train_x, test_x = pd.DataFrame(), pd.DataFrame()
     for exp in exp_list:
-        train_x[exp] = Util.load(f"../output/{exp}/preds/oof_likes.pkl")
-        test_x[exp] = Util.load(f"../output/{exp}/preds/preds_likes.pkl")
+        train_x[exp] = Util.load(f"../output/{exp}/preds/oof_PRICE.pkl")
+        test_x[exp] = Util.load(f"../output/{exp}/preds/preds_PRICE.pkl")
 
     # create train_x, train_y, test_x
     train_y = train["取引価格（総額）_log"]
