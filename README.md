@@ -1,6 +1,26 @@
 # 2021-summer-second-hand-apartment-price-prediction
 Nishika 主催 定期開催コンペ「中古マンション価格予測 2021夏の部
 
+### Solution OverView
+以下のような構成
+
+### Machine Spec
+CPU: Intel(R) Core(TM) i7-10875H CPU @ 2.30GHz  
+GPU: NVIDIA GeForce RTX2070 with Max-Q (8GB GDDR6 VRAM)  
+RAM: 16GB
+
+### Requirement
+* Docker
+* Docker-compose
+
+メモリ不足になる場合があるので、自身のPCではswap拡張を実施
+```
+sudo fallocate -l 10G /swapfile2
+sudo chmod 600 /swapfile2
+sudo mkswap /swapfile2
+sudo swapon /swapfile2
+```
+
 ### 実験環境構成
 mst8823さんの環境を参考に構成。
 URL： https://github.com/mst8823/atmacup10
@@ -9,6 +29,8 @@ URL： https://github.com/mst8823/atmacup10
 ```
 ├─input
 ├─notebooks
+├─add
+├─train
 ├─output
 │  └─exp0XXX
 │      ├─cols
@@ -28,6 +50,19 @@ URL： https://github.com/mst8823/atmacup10
 * src ディレクリ内に実験スクリプトを作成する必要がある。
 * 実験管理は1実験1スクリプト
 
+### run experiment
+追加データ作成は以下の.ipynbファイルを実行する。(notebookファイルを上から実行すればいい)
+* merge_train.ipynb （trainにあるcsvファイルをmergeする）
+* get_geo.ipynb （地理情報データの加工）
+* convert_eki.ipynb (駅情報データの加工)
+* get_price_index.ipynb （住宅価格指数データの加工）
+* land_price.ipynb （公示地価データの加工）
+
+```
+cd 2021-summer-second-hand-apartment-price-prediction/src
+python exp0xx.py
+```
+
 ### 1. feature engineering
 1. LabelEncoding, CountEncoding, TargetEncodingを使用
 2. 集約特徴量を作成  
@@ -44,7 +79,10 @@ URL： https://github.com/mst8823/atmacup10
 ### 3. model
 #### 1. Single model
 * LightGBM：CV=0.0714, LB=0.0729
-* CatBoost：CV=0.0705, LB=0.0724
+* CatBoost：CV=0.0705, LB=0.0724  
+
+### 2. Stacking_1st
+* Ridge * x, LightGBM * x2, CatBoost * x3, XGBoost * x4, 
 
 
 

@@ -95,7 +95,7 @@ def main():
     train = pd.read_csv(os.path.join(config.INPUT, "train.csv"))
 
     # read oof and pred
-    exp_list = ["exp014", "exp015", "exp016", "exp017", "exp018", "exp020", "exp026", "exp027", "exp028", "exp029"]
+    exp_list = ["exp031", "exp032", "exp033", "exp034", "exp035", "exp036", "exp037", "exp038", "exp039", "exp040"]
     train_x, test_x = pd.DataFrame(), pd.DataFrame()
     for exp in exp_list:
         train_x[exp] = Util.load(f"../output/{exp}/preds/oof_PRICE.pkl")
