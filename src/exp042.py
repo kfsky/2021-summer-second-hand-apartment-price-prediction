@@ -22,7 +22,7 @@ from mypipe.config import Config
 from mypipe.utils import reduce_mem_usage
 from mypipe.experiment import exp_env
 from mypipe.experiment.runner import Runner
-from mypipe.models.model_catboost import MyCatRegressor
+from mypipe.models.model_lgbm import MyLGBMModel
 from mypipe.Block_features import BaseBlock, ContinuousBlock, CountEncodingBlock, OheHotEncodingBlock, \
     LabelEncodingBlock, ArithmeticOperationBlock, AggregationBlock, WrapperBlock, AgeBlock
 
@@ -30,7 +30,7 @@ from mypipe.Block_features import BaseBlock, ContinuousBlock, CountEncodingBlock
 # ---------------------------------------------------------------------- #
 # oof出力ができてなかったので、再度作成
 # 基本exp029と同じ
-exp = "exp040"
+exp = "exp042"
 config = Config(EXP_NAME=exp, TARGET="PRICE")
 exp_env.make_env(config)
 rcParams['font.family'] = 'Noto Sans CJK JP'
@@ -598,7 +598,7 @@ def main():
     joblib.dump(test_x, os.path.join("../output/" + exp + "/feature", "test_feat.pkl"), 3)
 
     # set model
-    model = MyCatRegressor
+    model = MyLGBMModel
 
     # set run params
     run_params = {
@@ -614,9 +614,14 @@ def main():
     # set model params
     model_params = {
         "n_estimators": 20000,
-        "objective": "MAE",
+        "objective": "regression",
+        "metric": "mae",
         "learning_rate": 0.01,
-        "subsample": 0.8,
+        "num_leaves": 1024,
+        "n_jobs": -1,
+        "importance_type": "gain",
+        "reg_lambda": .5,
+        "colsample_bytree": .5,
         "max_depth": 10,
     }
 
