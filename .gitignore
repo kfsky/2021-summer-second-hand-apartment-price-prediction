@@ -4,9 +4,19 @@
 .DS_Store
 
 input/*
+!.gitkeep
+
 add/*
+!.gitkeep
+
 output/*
+!.gitkeep
+
 train/*
+!.gitkeep
+
 submission/*
+!.gitkeep
+
 src/catboost_info
 src/mypipe/models/__pycache__
