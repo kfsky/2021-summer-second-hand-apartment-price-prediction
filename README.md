@@ -83,8 +83,12 @@ python exp0xx.py
 
 LightGBM: 7model, CatBoost: 3modelをStackingに使用
 
-### 2. Stacking_1st
-* Ridge * 2, LightGBM * x2, CatBoost * x3, XGBoost * x4, 
+#### 2. Stacking_1st
+* Ridge * 2, LightGBM * 2, CatBoost * 2, XGBoost * 1, mlp * 3
+* CV = 5 or 10
+
+#### 3. Stacking_2nd
+Single model, stacking_1stをすべて使って再度学習
 
 
 
