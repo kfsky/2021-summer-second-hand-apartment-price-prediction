@@ -14,7 +14,6 @@ from sklearn.model_selection import KFold, StratifiedKFold
 from tqdm import tqdm
 from time import time
 from contextlib import contextmanager
-import gc
 
 sys.path.append("../")
 
@@ -22,13 +21,14 @@ from mypipe.config import Config
 from mypipe.utils import reduce_mem_usage
 from mypipe.experiment import exp_env
 from mypipe.experiment.runner import Runner
-from mypipe.models.model_ridge import MyRidgeModel
+from mypipe.models.model_xgb import MyXGBModel
 from mypipe.utils import Util
+import gc
 
 
 # ---------------------------------------------------------------------- #
-# stacking_2nd
-exp = "exp053"
+# stacking_1st
+exp = "exp054"
 config = Config(EXP_NAME=exp, TARGET="PRICE")
 exp_env.make_env(config)
 rcParams['font.family'] = 'Noto Sans CJK JP'
@@ -105,35 +105,39 @@ def main():
     # create train_x, train_y, test_x
     train_y = train["取引価格（総額）_log"]
 
-
-
     # dump features
     joblib.dump(train_x, os.path.join("../output/" + exp + "/feature", "train_feat.pkl"), 3)
     joblib.dump(test_x, os.path.join("../output/" + exp + "/feature", "test_feat.pkl"), 3)
 
     # set model
-    model = MyRidgeModel
+    model = MyXGBModel
 
     # set run params
     run_params = {
         "metrics": mean_absolute_error,
-        "cv": make_kf,
-        "folds": 5,
-        "feature_select_method": None,
-        "feature_select_fold": None,
+        "cv": make_skf,
+        "feature_select_method": "tree_importance",
+        "feature_select_fold": 5,
         "feature_select_num": 50,
-        "seeds": [71, 72, 73, 74, 75],
+        "folds": 5,
+        "seeds": [1108, 1109, 1110, 1111, 1112],
     }
 
     # set model params
     model_params = {
-        "random_state": 2021
+        "n_estimators": 20000,
+        "learning_rate": 0.01,
+        "eval_metric": "mae",
+        "max_depth": 6,
+        "n_jobs": -1,
+        "importance_type": "gain",
+        'colsample_bytree': 1,
     }
 
     # fit params
     fit_params = {
-        #"early_stopping_rounds": 100,
-        #"verbose": 1000
+        "early_stopping_rounds": 200,
+        "verbose": 100
     }
 
     # features
