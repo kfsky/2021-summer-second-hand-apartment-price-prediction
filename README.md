@@ -92,6 +92,7 @@ LightGBM: 7model, CatBoost: 3modelをStackingに使用
 Single model, stacking_1stをすべて使って再度学習
 * Ridge, LightGBM, XGBoost
 * CV = 5
+* Best: CV=0.0699, LB=0.0713(Ridge)
 
 #### 4. final layer
 Stacking 2ndの結果のaveraging
