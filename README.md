@@ -78,7 +78,7 @@ python exp0xx.py
 
 ### 3. model
 #### 1. Single model
-* LightGBM：CV=0.0714, LB=0.0729
+* LightGBM：CV=0.0713, LB=0.0728
 * CatBoost：CV=0.0705, LB=0.0724  
 
 LightGBM: 7model, CatBoost: 3modelをStackingに使用
